@@ -75,6 +75,19 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [SerializeField] private Transform _robot;
+
+        public WheelRotation wheelRotation;
+
+
+        private Quaternion _currentTiltRotation;
+        // for character tilt animation on normal speed
+        private float _forwardTiltAmount = 10f;
+        private float _tiltSmoothTime = 2.5f;
+        // for character tilt animation on sprint
+        private float _sprintForwardTiltAmount = 20f;
+        private float _sprintTiltSmoothTime = 5f;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -216,6 +229,9 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
+            float targetForwardTiltAmount = _input.sprint ? _sprintForwardTiltAmount : _forwardTiltAmount;
+            float targetTiltSmoothTime = _input.sprint ? _sprintTiltSmoothTime : _tiltSmoothTime;
+
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -262,8 +278,23 @@ namespace StarterAssets
 
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
 
+                float tiltAngleZ = Mathf.Clamp(-_input.move.y * targetForwardTiltAmount, targetForwardTiltAmount, targetForwardTiltAmount);
+
+                Quaternion targetTiltRotation = Quaternion.Euler(_robot.localEulerAngles.x, _robot.localEulerAngles.y, tiltAngleZ);
+
+                // interpolate rotation softly
+                _currentTiltRotation = Quaternion.Slerp(_currentTiltRotation, targetTiltRotation, Time.deltaTime * targetTiltSmoothTime);
+                _robot.localRotation = _currentTiltRotation;
+
+                //wheelRotation.OnMovement(targetSpeed);
+            }
+            else
+            {
+                // go back to neutral rotation on static player
+                _currentTiltRotation = Quaternion.Slerp(_currentTiltRotation, Quaternion.Euler(0, _robot.localEulerAngles.y, 0), Time.deltaTime * targetTiltSmoothTime);
+                _robot.localRotation = _currentTiltRotation;
+            }
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
