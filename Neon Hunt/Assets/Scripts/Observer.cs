@@ -21,6 +21,8 @@ public class Observer : MonoBehaviour
         if (other.transform == player)
         {
             m_IsPlayerInRange = false;
+            Debug.Log("enemigo");
+
         }
     }
 
@@ -36,7 +38,8 @@ public class Observer : MonoBehaviour
             {
                 if (raycastHit.collider.transform == player)
                 {
-
+                    Debug.Log("¡El enemigo te ha visto!");
+                    Time.timeScale = 0f;
                 }
             }
         }

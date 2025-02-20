@@ -19,7 +19,7 @@ public class WheelRotation : MonoBehaviour
 
         if (playerInput == null || wheel == null) return;
 
-        // 🔄 Rotación hacia adelante en el eje Z
+        // Rotación hacia adelante en el eje Z
         float forwardRotation = playerInput.move.y * rotationSpeed * Time.deltaTime;
         wheel.Rotate(Vector3.forward * forwardRotation, Space.Self);
 
