@@ -1,6 +1,8 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
+using System.Collections;
+
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -75,6 +77,14 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Header("Shooting")]
+        public ObjectPool bulletPool; // Referencia al pool de balas
+        public Transform firePoint;   // Punto de disparo
+        public float bulletSpeed = 20f;
+        public float shootCooldown = 2f; // Cooldown de 2 segundos
+
+        private bool canShoot = true; // Controla si el jugador puede disparar
+
         [SerializeField] private Transform _robot;
 
         public WheelRotation wheelRotation;
@@ -148,7 +158,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -172,6 +182,7 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Shoot();
         }
 
         private void LateUpdate()
@@ -309,7 +320,48 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
+        void Shoot()
+        {
+            if (canShoot)
+            {
+                if (_input.shoot)
+                {
+                    GameObject bullet = bulletPool.Pop(); // Obtener una bala del pool
 
+                    if (bullet != null)
+                    {
+                        bullet.transform.position = firePoint.position;
+                        bullet.transform.rotation = firePoint.rotation;
+                        bullet.SetActive(true);
+
+                        AssistedBullet assistedBullet = bullet.GetComponent<AssistedBullet>();
+                        if (assistedBullet != null)
+                        {
+                            assistedBullet.AssignTarget(firePoint.position); // Asignar el objetivo antes de disparar
+                        }
+
+                        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+                        if (rb != null)
+                        {
+                            rb.velocity = firePoint.forward * bulletSpeed;
+                        }
+
+                        StartCoroutine(ShootCooldown());
+                    }
+                }
+            }
+            else
+            {
+                _input.shoot = false;
+            }
+        }
+
+        private IEnumerator ShootCooldown()
+        {
+            canShoot = false; // Bloquea el disparo
+            yield return new WaitForSeconds(shootCooldown); // Espera 2 segundos
+            canShoot = true; // Habilita el disparo nuevamente
+        }
         private void JumpAndGravity()
         {
             if (Grounded)
