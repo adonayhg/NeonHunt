@@ -10,6 +10,10 @@ public class ObjectPool : MonoBehaviour
 
     [SerializeField]
     int amount = 10;
+
+    public static ObjectPool instance { get; private set; }
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,6 +21,8 @@ public class ObjectPool : MonoBehaviour
         GameObject temporal = null;
         for (int i = 0; i < amount; i++)
         {
+            instance = this;
+
             temporal = Instantiate(prefab);
             temporal.SetActive(false);
             pool.Push(temporal);

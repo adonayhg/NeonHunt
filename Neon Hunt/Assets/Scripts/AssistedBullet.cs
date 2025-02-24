@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AssistedBullet : MonoBehaviour
@@ -6,7 +7,7 @@ public class AssistedBullet : MonoBehaviour
     public LayerMask enemyLayer; // Capa de los enemigos
     public float bulletSpeed = 20f; // Velocidad de la bala
     private Transform targetEnemy; // Enemigo al que se dirige la bala
-
+    public ObjectPool objectPool;
 
     private Rigidbody rb; // Rigidbody de la bala
     private bool hasTarget = false; // Indica si la bala tiene un enemigo al que disparar
@@ -26,20 +27,19 @@ public class AssistedBullet : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
         // Si la bala colisiona con un enemigo, hacer algo (por ejemplo, aplicar daño)
-        if (other.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             // Aquí puedes aplicar el daño al enemigo
-            Debug.Log("Enemigo alcanzado: " + other.name);
-            Destroy(gameObject); // Destruir la bala al impactar
-
+            Debug.Log("Enemigo alcanzado: " + collision.gameObject.name);
             // Destruye el objeto enemigo
-            Destroy(other.gameObject);
-        }
+            Destroy(collision.gameObject);
 
-        Destroy(gameObject);
+        }
+        ObjectPool.instance.Push(gameObject);
+
     }
 
 

@@ -85,6 +85,8 @@ namespace StarterAssets
 
         private bool canShoot = true; // Controla si el jugador puede disparar
 
+        public Animator animator;
+
         [SerializeField] private Transform _robot;
 
         public WheelRotation wheelRotation;
@@ -173,6 +175,9 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            animator = GetComponent<Animator>();
+
         }
 
         private void Update()
@@ -347,13 +352,18 @@ namespace StarterAssets
                         }
 
                         StartCoroutine(ShootCooldown());
+
+                        animator.SetTrigger("Shoot");
+
                     }
                 }
+
             }
             else
             {
                 _input.shoot = false;
             }
+
         }
 
         private IEnumerator ShootCooldown()
