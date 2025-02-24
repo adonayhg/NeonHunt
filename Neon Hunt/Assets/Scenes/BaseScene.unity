@@ -18639,6 +18639,11 @@ PrefabInstance:
       objectReference: {fileID: 243902367}
     - target: {fileID: 1925873226565265913, guid: 2553cec8fdb3eb643bbe9f2ec880c472,
         type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 891477836}
+    - target: {fileID: 1925873226565265913, guid: 2553cec8fdb3eb643bbe9f2ec880c472,
+        type: 3}
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 640978808}
