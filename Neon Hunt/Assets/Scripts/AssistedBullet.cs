@@ -7,10 +7,11 @@ public class AssistedBullet : MonoBehaviour
     public LayerMask enemyLayer; // Capa de los enemigos
     public float bulletSpeed = 20f; // Velocidad de la bala
     private Transform targetEnemy; // Enemigo al que se dirige la bala
-    public ObjectPool objectPool;
 
     private Rigidbody rb; // Rigidbody de la bala
     private bool hasTarget = false; // Indica si la bala tiene un enemigo al que disparar
+
+    public GameObject prefabExplosion;
 
     void Start()
     {
@@ -34,10 +35,11 @@ public class AssistedBullet : MonoBehaviour
         {
             // Aquí puedes aplicar el daño al enemigo
             Debug.Log("Enemigo alcanzado: " + collision.gameObject.name);
+
             // Destruye el objeto enemigo
             Destroy(collision.gameObject);
-
         }
+        Instantiate(prefabExplosion, transform.position, Quaternion.identity);
         ObjectPool.instance.Push(gameObject);
 
     }

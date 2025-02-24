@@ -84,6 +84,8 @@ namespace StarterAssets
         public float shootCooldown = 2f; // Cooldown de 2 segundos
 
         private bool canShoot = true; // Controla si el jugador puede disparar
+        public GameObject prefabExplosion;
+
 
         public Animator animator;
 
@@ -176,7 +178,6 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            animator = GetComponent<Animator>();
 
         }
 
@@ -350,14 +351,14 @@ namespace StarterAssets
                         {
                             rb.velocity = firePoint.forward * bulletSpeed;
                         }
-
+                        
                         StartCoroutine(ShootCooldown());
 
                         animator.SetTrigger("Shoot");
+                        Instantiate(prefabExplosion, firePoint.position, Quaternion.identity);
 
                     }
                 }
-
             }
             else
             {
