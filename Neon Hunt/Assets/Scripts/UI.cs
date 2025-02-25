@@ -14,13 +14,16 @@ public class UI : MonoBehaviour
     public GameObject Sliders;
     public GameObject Logo;
 
-   /* [SerializeField] Slider sliderMusica;
-    [SerializeField] float volumenMusica;
-    [SerializeField] float recordScore;*/
+    public GameObject canvasPerdiste;
+
+
+    /* [SerializeField] Slider sliderMusica;
+     [SerializeField] float volumenMusica;
+     [SerializeField] float recordScore;*/
 
 
     void Start()
-    {
+    {        
 
         // Configuración inicial del volumen
         /*sliderMusica.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
@@ -65,11 +68,13 @@ public class UI : MonoBehaviour
     {
         Application.Quit();
     }
-
-
     public void ReStart()
     {
-        SceneManager.LoadScene("Minijuego");
+        SceneManager.LoadScene("BaseScene");
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene("UI");
     }
 }
 
