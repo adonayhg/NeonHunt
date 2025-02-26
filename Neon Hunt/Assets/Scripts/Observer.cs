@@ -39,8 +39,9 @@ public class Observer : MonoBehaviour
                 if (raycastHit.collider.transform == player)
                 {
                     Debug.Log("¡El enemigo te ha visto!");
-                    Time.timeScale = 0f;
+                    SoundManager.instance.ReproducirSonidoAlarma();
                     SceneManager.LoadScene("Final");
+                    Cursor.lockState = CursorLockMode.None;
                 }
             }
         }

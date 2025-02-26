@@ -325,6 +325,7 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+
         }
         void Shoot()
         {
@@ -356,6 +357,7 @@ namespace StarterAssets
 
                         animator.SetTrigger("Shoot");
                         Instantiate(prefabExplosion, firePoint.position, Quaternion.identity);
+                        SoundManager.instance.ReproducirSonidoDisparo();
 
                     }
                 }

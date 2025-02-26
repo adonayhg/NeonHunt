@@ -8,7 +8,8 @@ public class EnemigoWheel : MonoBehaviour
 
     void Start()
     {
-        
+        EnemiesContainer.instance.AddEnemie();
+
     }
 
     // Update is called once per frame

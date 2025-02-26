@@ -38,9 +38,14 @@ public class AssistedBullet : MonoBehaviour
 
             // Destruye el objeto enemigo
             Destroy(collision.gameObject);
+            EnemiesContainer.instance.RemoveEnemie();
+            ScoreManager.instance.AddPoints(2);
         }
         Instantiate(prefabExplosion, transform.position, Quaternion.identity);
+        SoundManager.instance.ReproducirSonidoExplosion();
         ObjectPool.instance.Push(gameObject);
+        ScoreManager.instance.RestPoints(2);
+
 
     }
 
