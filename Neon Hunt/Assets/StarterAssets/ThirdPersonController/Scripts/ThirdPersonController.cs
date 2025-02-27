@@ -329,7 +329,7 @@ namespace StarterAssets
         }
         void Shoot()
         {
-            if (canShoot)
+            if (canShoot & EnergySystem.instance.disparoPosible)
             {
                 if (_input.shoot)
                 {
@@ -358,6 +358,7 @@ namespace StarterAssets
                         animator.SetTrigger("Shoot");
                         Instantiate(prefabExplosion, firePoint.position, Quaternion.identity);
                         SoundManager.instance.ReproducirSonidoDisparo();
+                        EnergySystem.instance.Disparo();
 
                     }
                 }

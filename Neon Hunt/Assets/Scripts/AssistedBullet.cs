@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class AssistedBullet : MonoBehaviour
 {
@@ -12,6 +14,12 @@ public class AssistedBullet : MonoBehaviour
     private bool hasTarget = false; // Indica si la bala tiene un enemigo al que disparar
 
     public GameObject prefabExplosion;
+    public GameObject prefabPowerUp100;
+    public GameObject prefabPowerUp30s;
+    [SerializeField] private float probabilidadPowerUp100 = 0.1f;
+    [SerializeField] private float probabilidadPowerUp30s = 0.05f;
+
+
 
     void Start()
     {
@@ -40,6 +48,16 @@ public class AssistedBullet : MonoBehaviour
             Destroy(collision.gameObject);
             EnemiesContainer.instance.RemoveEnemie();
             ScoreManager.instance.AddPoints(2);
+
+            if (UnityEngine.Random.value <= probabilidadPowerUp100 && prefabPowerUp100 != null)
+            {
+                Instantiate(prefabPowerUp100, transform.position, Quaternion.identity);
+            }
+            if (UnityEngine.Random.value <= probabilidadPowerUp30s && prefabPowerUp30s != null)
+            {
+                Instantiate(prefabPowerUp30s, transform.position, Quaternion.identity);
+            }
+
         }
         Instantiate(prefabExplosion, transform.position, Quaternion.identity);
         SoundManager.instance.ReproducirSonidoExplosion();

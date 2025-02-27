@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     private bool juegoGanado = false;
 
 
-
     public static GameManager instance { get; private set; }
 
     private void Awake()
